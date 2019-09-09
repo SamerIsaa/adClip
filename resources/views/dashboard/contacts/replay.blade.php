@@ -46,7 +46,7 @@
                             <div class="form-group row">
                                 <label class="col-form-label col-lg-3 col-sm-12">الرد</label>
                                 <div class="col-lg-9 col-md-9 col-sm-12">
-                                    <textarea class="summernote" id="kt_summernote_1" name="message"></textarea>
+                                    <textarea class="summernote" id="kt_summernote_1" name="message" style="display: none"></textarea>
                                 </div>
                             </div>
 

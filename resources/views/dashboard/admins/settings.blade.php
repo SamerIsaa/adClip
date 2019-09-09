@@ -1,8 +1,8 @@
 @extends('dashboard.layout.master')
 
 
-@section('content')
 
+@section('content')
 
     <!-- begin:: Content -->
     <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
@@ -16,31 +16,17 @@
                     <div class="kt-portlet__head">
                         <div class="kt-portlet__head-label">
                             <h3 class="kt-portlet__head-title">
-                                إضافة تصنيف
+                                الإعدادات
                             </h3>
                         </div>
                     </div>
 
                     <!--begin::Form-->
-                    <form class="kt-form" action="{{ route('catagory.store') }}" method="post" id="kt_form_1">
+                    <form class="kt-form" action="{{ route('admin.settings') }}" method="post">
                         @csrf
+                         <div class="kt-portlet__body ">
 
-                        <div class="form-group form-group-last kt-hide">
-                            <div class="alert alert-danger" role="alert" id="kt_form_1_msg">
-                                <div class="alert-icon"><i class="flaticon-warning"></i></div>
-                                <div class="alert-text">
-                                    Oh snap! Change a few things up and try submitting again.
-                                </div>
-                                <div class="alert-close">
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true"><i class="la la-close"></i></span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="kt-portlet__body ">
-
-{{--                             if any error happen from validation--}}
+                            {{--                             if any error happen from validation--}}
                             @if($errors->any())
                                 <div class="alert alert-danger fade show" role="alert">
                                     <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
@@ -54,7 +40,7 @@
                             @endif
 
 
-{{--                            // if the creation for the admin complete successfully--}}
+                            {{--                            // if the creation for the admin complete successfully--}}
                             @if(session('success'))
                                 <div class="alert alert-success fade show" role="alert" >
                                     <div class="alert-icon"><i class="flaticon-warning"></i></div>
@@ -66,20 +52,47 @@
                                     </div>
                                 </div>
                             @endif
+                            @if(session('error'))
+                                <div class="alert alert-danger fade show" role="alert" >
+                                    <div class="alert-icon"><i class="flaticon-warning"></i></div>
+                                    <div class="alert-text">{{ session('error') }}</div>
+                                    <div class="alert-close">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true"><i class="la la-close"></i></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            @endif
 
 
                             <div class="form-group">
-                                <label>اسم التصنيف باللغة العربية</label>
+                                <label>اسم المدير</label>
                                 <input type="text" class="form-control form-control-lg text-left" aria-describedby="emailHelp"
-                                       placeholder="اسم التصنيف باللغة العربية" name="name_ar" aria-describedby="billing_card_name-error" value="{{ old('name_ar') }}">
+                                       placeholder="اسم المدير" name="name" value="{{ auth()->user()->name }}">
                             </div>
 
                             <div class="form-group">
-                                <label>اسم التصنيف باللغة الإنجليزية</label>
+                                <label>اسم المستخدم</label>
                                 <input type="text" class="form-control form-control-lg text-left" aria-describedby="emailHelp"
-                                       placeholder="اسم التصنيف باللغة الإنجليزية" name="name_en"  aria-describedby="billing_card_name-error" value="{{ old('name_en') }}">
+                                       placeholder="اسم المستخدم" name="user_name" value="{{ auth()->user()->user_name }}">
+                            </div>
+                            <div class="form-group">
+                                <label>البريد الإلكتروني</label>
+                                <input type="email" class="form-control form-control-lg text-left" aria-describedby="emailHelp"
+                                       placeholder="البريد الإلكتروني" name="email" value="{{ auth()->user()->email }}">
                             </div>
 
+                            <div class="form-group">
+                                <label>كلمة المرور</label>
+                                <input type="password" class="form-control form-control-lg text-left" aria-describedby="emailHelp"
+                                       placeholder="كلمة المرور" name="password">
+                            </div>
+
+                            <div class="form-group">
+                                <label> تاكيد كلمة المرور</label>
+                                <input type="password" class="form-control form-control-lg text-left" aria-describedby="emailHelp"
+                                       placeholder="تاكيد كلمة المرور" name="password_confirmation">
+                            </div>
                         </div>
                         <div class="kt-portlet__foot">
                             <div class="kt-form__actions " style="text-align: left;">
@@ -99,53 +112,6 @@
     </div>
 
     <!-- end:: Content -->
+
 @endsection
 
-@section('js')
-    <script>
-
-
-        var KTFormControls = function () {
-            // Private functions
-
-            var demo1 = function () {
-                $( "#kt_form_1" ).validate({
-                    // define validation rules
-                    rules: {
-                        name_ar: {
-                            required: true,
-
-                        },
-                        name_en: {
-                            required: true
-                        }
-                    },
-
-                    //display error alert on form submit
-                    invalidHandler: function(event, validator) {
-                        var alert = $('#kt_form_1_msg');
-                        alert.removeClass('kt--hide').show();
-                        KTUtil.scrollTop();
-                    },
-
-                    submitHandler: function (form) {
-                        form[0].submit(); // submit the form
-                    }
-                });
-            }
-
-
-            return {
-                // public functions
-                init: function() {
-                    demo1();
-
-                }
-            };
-        }();
-
-        jQuery(document).ready(function() {
-            KTFormControls.init();
-        });
-    </script>
-@endsection

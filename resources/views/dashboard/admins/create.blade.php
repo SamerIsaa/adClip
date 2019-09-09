@@ -74,6 +74,14 @@
                                 <input type="password" class="form-control form-control-lg text-left" aria-describedby="emailHelp"
                                        placeholder="كلمة المرور" name="password">
                             </div>
+
+                            <div class="form-group">
+                                <label> تاكيد كلمة المرور</label>
+                                <input type="password" class="form-control form-control-lg text-left" aria-describedby="emailHelp"
+                                       placeholder="تاكيد كلمة المرور" name="password_confirmation">
+                            </div>
+
+
                         </div>
                         <div class="kt-portlet__foot">
                             <div class="kt-form__actions " style="text-align: left;">

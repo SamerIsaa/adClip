@@ -8,6 +8,7 @@ use App\Company;
 use App\Http\Requests\CompaniesRequest;
 use Carbon\Carbon;
 use DemeterChain\C;
+use function GuzzleHttp\Promise\all;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\View;
@@ -168,7 +169,7 @@ class CompaniesController extends Controller
         $orderDir = $orderDir[0]['dir'];
 
         $company = Company::query();
-        $company->where('endSubscription' , '0');
+        $company->where('endSubscription', '0');
 
         if ($orderCol != null) {
             if ($orderCol == 1) {
@@ -204,31 +205,24 @@ class CompaniesController extends Controller
     }
 
 
-    public function siteClients($city_id, $catagory_id, Request $request)
+    public function siteClients(Request $request)
     {
         $companies = Company::query();
-        $companies->where('endSubscription' , '0');
+        $companies->where('endSubscription', '0');
+
+
         $cities = City::all();
         $catagories = Catagory::all();
 
-        if ($city_id > 0) {
-            $companies->where('city_id', $city_id);
+        $city = $request->get('city');
+        $catagory = $request->get('catagory');
+
+        if ($city > 0) {
+            $companies->where('city_id', $city);
         }
-        if ($catagory_id > 0) {
-            $companies->where('catagory_id', $catagory_id);
+        if ($catagory > 0) {
+            $companies->where('catagory_id', $catagory);
         }
-
-        if ($request->ajax()) {
-
-            $companies = $companies->paginate(24);
-
-            $html = View::make('site.clients.clientInstance', ['companies' => $companies])->render();
-            return response()->json([
-                'status' => true,
-                'data' => $html
-            ]);
-        }
-
 
         $companies = $companies->paginate(24);
 
@@ -240,7 +234,7 @@ class CompaniesController extends Controller
     // Display Video's of the clicked company in index page
     public function showCompany($id)
     {
-        $company = Company::where('endSubscription' , '0')->find($id);
+        $company = Company::where('endSubscription', '0')->find($id);
         return view('site.clients.companyShow', compact('company'));
 
     }
@@ -253,6 +247,7 @@ class CompaniesController extends Controller
 
     public function Endeddatatable(Request $request)
     {
+//        dd($request->all());
         $length = Input::get('length');
         $start = Input::get('start');
         $search = Input::get('search');
@@ -264,8 +259,8 @@ class CompaniesController extends Controller
         $orderCol = $orderCol[0]['column'];
         $orderDir = $orderDir[0]['dir'];
 
-        $company = Company::query();
-//        dd($company);
+        $company = Company::query()->whereDate('end_subscription', '<=', Carbon::now());
+
         if ($orderCol != null) {
             if ($orderCol == 1) {
                 $company->orderBy('name_ar', $orderDir);
@@ -275,37 +270,29 @@ class CompaniesController extends Controller
         }
 
         if ($search != null) {
-            $company = $company->orWhereHas('city', function ($query) use ($search) {
-                $query->where('name_ar', 'like', '%' . $search . '%')
-                    ->orWhere('name_en', 'like', '%' . $search . '%');
-            });
-            $company = $company->orWhereHas('catagory', function ($query) use ($search) {
-                $query->where('name_ar', 'like', '%' . $search . '%')
-                    ->orWhere('name_en', 'like', '%' . $search . '%');
-            });
-            $company = $company->orWhere('name_ar', 'like', '%' . $search . '%')
-                ->orWhere('name_ar', 'like', '%' . $search . '%')
-                ->orWhere('description_ar', 'like', '%' . $search . '%')
-                ->orWhere('description_en', 'like', '%' . $search . '%');
+            $company =  $company->where('name_ar', 'like', '%' . $search . '%')
+                                ->where('name_en', 'like', '%' . $search . '%');
         }
-
         $company2['iTotalRecords'] = $company->count();
         $company2['iTotalDisplayRecords'] = $company->count();
         $company2['sEcho'] = 0;
         $company2['sColumns'] = '';
 
-        $company2['data'] = $company->where('end_subscription' ,'<=' , Carbon::now()->toDateTime())
-            ->take($length)->skip($start)->get();
-        return $company2;
+         $company2['data'] = $company->take($length)->skip($start)->get();
+         return $company2;
     }
 
-    public function deactivate(Request $request)
+    public function deactivate($id , Request $request)
     {
-        $com = Company::find($request->id);
-        $com->endSubscription  = !$com->endSubscription;
+        $com = Company::find($id);
+        $com->endSubscription = !$com->endSubscription;
         $com->save();
 
-        return '1';
+        if ($request->ajax()){
+
+            return '1';
+        }
+        return redirect()->back();
     }
 
 

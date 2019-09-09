@@ -14,52 +14,54 @@
             </div>
             <div class="col-md-8 col-md-offset-2">
                 <div class="search_head2">
-                    <ul>
-                        <li>
-                            <select class="selectpicker" id="city">
-                                @if($cities)
-                                    <option value="0">
-                                        @if(app()->isLocale('ar'))
-                                            المدن
-                                        @else
-                                            Cities
-                                        @endif
-                                    </option>
-                                    @foreach($cities as $city)
-                                        @if(app()->isLocale('ar'))
-                                            <option value="{{ $city->id }}">{{ $city->name_ar }}</option>
-                                        @else
-                                            <option value="{{ $city->id }}">{{ $city->name_en }}</option>
-                                        @endif
-                                    @endforeach
-                                @endif
-                            </select>
-                        </li>
-                        <li>
-                            <select class="selectpicker" id="catagory">
+                    <form action="{{ route('clients.index') }}" method="get">
+                        <ul>
+                            <li>
+                                <select class="selectpicker" name="city">
+                                    @if($cities)
+                                        <option value="0">
+                                            @if(app()->isLocale('ar'))
+                                                المدن
+                                            @else
+                                                Cities
+                                            @endif
+                                        </option>
+                                        @foreach($cities as $city)
+                                            @if(app()->isLocale('ar'))
+                                                <option value="{{ $city->id }}">{{ $city->name_ar }}</option>
+                                            @else
+                                                <option value="{{ $city->id }}">{{ $city->name_en }}</option>
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </li>
+                            <li>
+                                <select class="selectpicker" name="catagory">
 
-                                @if($catagories)
-                                    <option value="0">
-                                        @if(app()->isLocale('ar'))
-                                            التصنيفات
-                                        @else
-                                            Catagories
-                                        @endif
-                                    </option>
-                                    @foreach($catagories as $catagory)
-                                        @if(app()->isLocale('ar'))
-                                            <option value="{{ $catagory->id }}">{{ $catagory->name_ar }}</option>
-                                        @else
-                                            <option value="{{ $catagory->id }}">{{ $catagory->name_en }}</option>
-                                        @endif
-                                    @endforeach
-                                @endif
-                            </select>
-                        </li>
-                        <li>
-                            <button type="button" onclick="filterClients()">{{ __('site.search') }}</button>
-                        </li>
-                    </ul>
+                                    @if($catagories)
+                                        <option value="0">
+                                            @if(app()->isLocale('ar'))
+                                                التصنيفات
+                                            @else
+                                                Catagories
+                                            @endif
+                                        </option>
+                                        @foreach($catagories as $catagory)
+                                            @if(app()->isLocale('ar'))
+                                                <option value="{{ $catagory->id }}">{{ $catagory->name_ar }}</option>
+                                            @else
+                                                <option value="{{ $catagory->id }}">{{ $catagory->name_en }}</option>
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </li>
+                            <li>
+                                <button type="submit">{{ __('site.search') }}</button>
+                            </li>
+                        </ul>
+                    </form>
                 </div>
             </div>
 
@@ -70,7 +72,8 @@
 
                         @if($companies)
                             @foreach($companies as $company)
-                                <li id="company_card" onclick="window.location = '{{ url('client/' . $company->id ) }}'">
+                                <li id="company_card"
+                                    onclick="window.location = '{{ url('client/' . $company->id ) }}'">
                                     <div>
                                         <div class="imgsq">
                                             <img src="{{ asset($company->logo) }}">
@@ -91,7 +94,7 @@
                     <nav aria-label="Page navigation example">
 
                         <ul class="pagination">
-                            {{ $companies->links() }}
+                            {{ $companies->appends(Illuminate\Support\Facades\Input::except('page'))->links() }}
                         </ul>
                     </nav>
                 </div>
@@ -109,7 +112,7 @@
         function filterClients(e) {
             let city_id = $('select#city').val();
             let catagory_id = $('select#catagory').val();
-            let link = "{{ url('clients/' ) }}/" + city_id + "/"+catagory_id;
+            let link = "{{ url('clients/' ) }}/" + city_id + "/" + catagory_id;
             $.ajax({
                 url: link,
                 method: "GET",

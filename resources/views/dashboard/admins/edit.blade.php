@@ -65,6 +65,7 @@
                                 </div>
                             @endif
 
+
                             <div class="form-group">
                                 <label>اسم المدير</label>
                                 <input type="text" class="form-control form-control-lg text-left" aria-describedby="emailHelp"
@@ -72,9 +73,26 @@
                             </div>
 
                             <div class="form-group">
+                                <label>اسم المستخدم</label>
+                                <input type="text" class="form-control form-control-lg text-left" aria-describedby="emailHelp"
+                                       placeholder="اسم المستخدم" name="user_name" value="{{ $admin->user_name }}">
+                            </div>
+                            <div class="form-group">
+                                <label>البريد الإلكتروني</label>
+                                <input type="email" class="form-control form-control-lg text-left" aria-describedby="emailHelp"
+                                       placeholder="البريد الإلكتروني" name="email" value="{{ $admin->email }}">
+                            </div>
+
+                            <div class="form-group">
                                 <label>كلمة المرور</label>
                                 <input type="password" class="form-control form-control-lg text-left" aria-describedby="emailHelp"
                                        placeholder="كلمة المرور" name="password">
+                            </div>
+
+                            <div class="form-group">
+                                <label> تاكيد كلمة المرور</label>
+                                <input type="password" class="form-control form-control-lg text-left" aria-describedby="emailHelp"
+                                       placeholder="تاكيد كلمة المرور" name="password_confirmation">
                             </div>
                         </div>
                         <div class="kt-portlet__foot">

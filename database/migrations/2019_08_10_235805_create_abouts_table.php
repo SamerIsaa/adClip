@@ -22,6 +22,7 @@ class CreateAboutsTable extends Migration
             $table->longText('about_ar')->nullable();
             $table->longText('about_en')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

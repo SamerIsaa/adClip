@@ -18,7 +18,7 @@ class CreateCompanyVideosTable extends Migration
             $table->unsignedBigInteger('company_id');
             $table->string('path');
             $table->timestamps();
-
+            $table->softDeletes();
             $table->foreign('company_id')->references('id')->on('companies');
         });
     }

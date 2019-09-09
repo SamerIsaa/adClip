@@ -45,50 +45,49 @@
                             <li><a href="javascript:;" class="catagories" name="شركات"><i class="icon-office-block"></i>{{ __('site.companies') }}</a></li>
                         </ul>
                         <div class="search_head">
-                            <h2>البحث</h2>
-                            <ul>
-                                <li>
-                                    <select class="selectpicker" id="city">
-                                        @if($cities)
-                                            <option value="0">
-                                                @if(app()->isLocale('ar'))
-                                                    المدن
-                                                @else
-                                                    Cities
-                                                @endif
-                                            </option>
-                                            @foreach($cities as $city)
-                                                @if(app()->isLocale('ar'))
-                                                    <option value="{{ $city->id }}">{{ $city->name_ar }}</option>
-                                                @else
-                                                    <option value="{{ $city->id }}">{{ $city->name_en }}</option>
-                                                @endif
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                </li>
-                                <li>
-                                    <select class="selectpicker" id="catagory">
-                                        @if($catagories)
-                                            <option value="0">
-                                                @if(app()->isLocale('ar'))
-                                                    التصنيفات
-                                                @else
-                                                    Catagories
-                                                @endif
-                                            </option>
-                                            @foreach($catagories as $catagory)
-                                                @if(app()->isLocale('ar'))
-                                                    <option value="{{ $catagory->id }}">{{ $catagory->name_ar }}</option>
-                                                @else
-                                                    <option value="{{ $catagory->id }}">{{ $catagory->name_en }}</option>
-                                                @endif
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                </li>
-                            </ul>
-                            <button type="button" onclick="filterClients()">{{ __('site.search') }}</button>
+                            <form action="{{ route('clients.index') }}" method="get">
+                                <h2>البحث</h2>
+                                <select class="selectpicker" name="city">
+                                    @if($cities)
+                                        <option value="0">
+                                            @if(app()->isLocale('ar'))
+                                                المدن
+                                            @else
+                                                Cities
+                                            @endif
+                                        </option>
+                                        @foreach($cities as $city)
+                                            @if(app()->isLocale('ar'))
+                                                <option value="{{ $city->id }}">{{ $city->name_ar }}</option>
+                                            @else
+                                                <option value="{{ $city->id }}">{{ $city->name_en }}</option>
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                </select>
+
+                                <select class="selectpicker" name="catagory">
+                                    @if($catagories)
+                                        <option value="0">
+                                            @if(app()->isLocale('ar'))
+                                                التصنيفات
+                                            @else
+                                                Catagories
+                                            @endif
+                                        </option>
+                                        @foreach($catagories as $catagory)
+                                            @if(app()->isLocale('ar'))
+                                                <option value="{{ $catagory->id }}">{{ $catagory->name_ar }}</option>
+                                            @else
+                                                <option value="{{ $catagory->id }}">{{ $catagory->name_en }}</option>
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                </select>
+
+                                <button type="submit">{{ __('site.search') }}</button>
+
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -144,62 +143,6 @@
 @include('site.layout.scripts')
 
 
-<script type="text/javascript">
 
-    function filterClients(e) {
-        let city_id = $('select#city').val();
-        let catagory_id = $('select#catagory').val();
-        window.location = "{{ url('clients') }}/" + city_id + "/" + catagory_id;
-    }
-
-    $(document).ready(function () {
-
-        getAd('');
-        $('a.catagories').click(function () {
-            let catName = $(this)[0].name;
-            getAd(catName);
-
-        });
-    });
-
-    function getAd(catName) {
-        $.ajax({
-            url: "{{ url('comp-ad') }}",
-            method: "GET",
-            data: {
-                'catagory': catName
-            },
-            success: function (response) {
-                if (response.status == 'true') {
-
-                    let adArray = response.data;
-                    let player = document.getElementById('video');
-
-                    if (adArray.length > 0){
-
-                        let index = 0 ;
-
-                        player.setAttribute('src' , "{{ asset('/') }}" + adArray[index]['path']);
-                        $("#video").bind("ended", function() {
-                            if (index == adArray.length -1){
-                                index = 0;
-                            }else{
-                                index++;
-                            }
-                            player.setAttribute('src' , "{{ asset('/') }}" + adArray[index]['path']);
-
-                        });
-                    } else {
-                        player.setAttribute('src' , "No Ad");
-
-                    }
-
-
-                }
-            }
-        });
-    }
-
-</script>
 </body>
 </html>

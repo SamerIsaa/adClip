@@ -4,7 +4,7 @@
     <!-- begin:: Aside -->
     <div class="kt-aside__brand kt-grid__item " id="kt_aside_brand">
         <div class="kt-aside__brand-logo">
-            <a href="{{ url('/admin') }}">
+            <a href="{{ route('admin.index1') }}">
                 <img alt="Logo" src="{{ asset('siteAssets') }}/images/logo.png"/>
             </a>
         </div>
@@ -49,7 +49,7 @@
         <div id="kt_aside_menu" class="kt-aside-menu " data-ktmenu-vertical="1" data-ktmenu-scroll="1"
              data-ktmenu-dropdown-timeout="500">
             <ul class="kt-menu__nav text-right">
-                <li class="kt-menu__item  kt-menu__item--active" aria-haspopup="true"><a href="demo1/index.html"
+                <li class="kt-menu__item  kt-menu__item--active" aria-haspopup="true"><a href="{{ route('admin.index1') }}"
                                                                                          class="kt-menu__link "><span
                                 class="kt-menu__link-icon"><svg xmlns="http://www.w3.org/2000/svg"
                                                                 xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"

@@ -24,10 +24,10 @@ class AdminRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required' ,
+            'name' => 'required',
             'email' => 'required|email|unique:admins,email',
             'user_name' => 'required|unique:admins,user_name',
-            'password' => 'required|min:6',
+            'password' => 'required|confirmed|min:6',
         ];
     }
 
@@ -35,13 +35,15 @@ class AdminRequest extends FormRequest
     public function messages()
     {
         return [
-          'name.required'   => 'الأسم مطلوب',
-          'email.required'   => 'البريد الإلكتروني مطلوب',
-          'email.email'   => 'يجب أن يكون البريد الإلكتروني عنوان بريد إلكتروني صالح',
-          'email.unique'   => 'البريد الإلكتروني الذي قمت بادخاله مُستخدم',
-          'user_name.unique'   => 'اسم المستخدم الذي قمت بادخاله مُستخدم',
-          'password.required'   => 'كلمة المرور مطلوبة',
-          'password.min'   => 'كلمة المرور يجب ان تتكون من 6 حروف على الأقل',
+            'name.required' => 'الأسم مطلوب',
+            'email.required' => 'البريد الإلكتروني مطلوب',
+            'email.email' => 'يجب أن يكون البريد الإلكتروني عنوان بريد إلكتروني صالح',
+            'email.unique' => 'البريد الإلكتروني الذي قمت بادخاله مُستخدم',
+            'user_name.unique' => 'اسم المستخدم الذي قمت بادخاله مُستخدم',
+            'password.required' => 'كلمة المرور مطلوبة',
+            'password.min' => 'كلمة المرور يجب ان تتكون من 6 حروف على الأقل',
+            'password.confirmed' => 'كلمة المرور يجب ان تكون متطابقة',
+
         ];
     }
 }

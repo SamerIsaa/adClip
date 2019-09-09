@@ -743,16 +743,16 @@ section.footer {
     float: right;width: 100%;
     padding: 30px 0 50px;
 }
-.search_head2>ul>li {
+.search_head2>form>ul>li {
     float: right;
     width: 33.3%;
     padding: 10px;
 }
-.search_head2>ul>li .bootstrap-select {
+.search_head2>form>ul>li .bootstrap-select {
     float: right;
     width: 100% !important;
 }
-.search_head2>ul>li .bootstrap-select button{
+.search_head2>form>ul>li .bootstrap-select button{
     float: right;
     width: 100% !important;
     background: #f8f8f8;
@@ -763,13 +763,13 @@ section.footer {
     padding: 11px;
     border-radius: 30px;
 }
-.search_head2>ul>li .bootstrap-select .bs-caret{
+.search_head2>form>ul>li .bootstrap-select .bs-caret{
     display: none;
 }
-.search_head2>ul>li .bootstrap-select button span{
+.search_head2>form>ul>li .bootstrap-select button span{
     text-align: right !important;
 }
-.search_head2>ul>li:last-child button{
+.search_head2>form>ul>li:last-child button{
     float: right;
     width: 100%;
     color: #fff;
@@ -784,7 +784,7 @@ section.footer {
     transition: all 300ms ease;
     border-radius: 30px;
 }
-.search_head2>ul>li:last-child button:hover{
+.search_head2>form>ul>li:last-child button:hover{
     background: #497192;
     -webkit-transition: all 300ms ease;
     -moz-transition: all 300ms ease;
@@ -914,7 +914,7 @@ ul.menu-sidebar.sid2q li a{
     .item_s2 ul li{
         width: 33.3%;
     }
-    .search_head2>ul>li{
+    .search_head2>form>ul>li{
         width: 100%;
     }
     .list_video ul li{

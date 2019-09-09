@@ -26,14 +26,24 @@
                 </div>
                 <div class="kt-portlet__head-toolbar">
                     <div class="kt-portlet__head-wrapper">
-                        <div class="kt-portlet__head-actions">
-                            <a href="{{ route('company-ad.create' , $company->id) }}" class="btn btn-brand btn-elevate btn-icon-sm">
-                                <i class="la la-plus"></i>
-                                اضافة إعلانات
-                            </a>
-                        </div>
+
+
+                        <form class="md-form" id="uploadAd" method="post" action="{{ route('company-ad.store') }}" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="company_id" value="{{ $company->id }}">
+                            <div class="file-field">
+                                <div class="btn btn-primary btn-sm float-left">
+
+                                    <span>اضافة إعلانات</span>
+                                    <input type="file" id="BSbtnsuccess" name="ad">
+
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
+
+
             </div>
             <div class="kt-portlet__body">
 
@@ -107,10 +117,7 @@
                             title: 'Actions',
                             orderable: false,
                             render: function (data, type, full, meta) {
-                                return `<input type="hidden" class="id_hidden" value="`+ full.id + `">
-                                        <a href="`+ window.location.origin + "/admin/company-ad/"+ full.id +`/edit" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="تعديل الإعلان">
-                                            <i class="la la-edit"></i>
-                                        </a>
+                                return `<input type="hidden" class="id_hidden" value="` + full.id + `">
                                         <a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md delete" title="Delete">
                                             <i class="la la-times"></i>
                                         </a>
@@ -123,7 +130,7 @@
                             orderable: false,
                             render: function (data, type, full, meta) {
                                 if (full.path)
-                                    return `<a class="dropdown-item" href="`+ window.location.origin + "/admin/company-ad/" + full.id + `"><i class="far fa-building"></i> عرض  إعلانات الشركة</a>`;
+                                    return `<a class="dropdown-item" href="` + window.location.origin  + "/" +full.path+ `" target="_blank"><i class="far fa-building"></i> عرض  إعلانات الشركة</a>`;
                                 else
                                     return `<a class="dropdown-item" href="javascript:;"><i class="far fa-building"></i> لا يوجد اعلان</a>`;
 
@@ -206,5 +213,10 @@
 
 
         });
+
+
+        document.getElementById("BSbtnsuccess").onchange = function() {
+            document.getElementById("uploadAd").submit();
+        };
     </script>
 @endsection

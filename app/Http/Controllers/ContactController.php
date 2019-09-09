@@ -96,7 +96,7 @@ class ContactController extends Controller
         $contact2['sEcho'] = 0;
         $contact2['sColumns'] = '';
 
-        $contact2['data'] = $contact->take($length)->skip($start)->get();
+        $contact2['data'] = $contact->orderBy('created_at' , 'desc')->take($length)->skip($start)->get();
         return $contact2;
     }
 

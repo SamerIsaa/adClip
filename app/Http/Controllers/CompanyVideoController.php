@@ -28,15 +28,6 @@ class CompanyVideoController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create($id)
-    {
-        return view('dashboard.companyVideo.create', compact('id'));
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -46,71 +37,22 @@ class CompanyVideoController extends Controller
      */
     public function store(Request $request)
     {
-        CompanyVideo::create($request->all());
-        return $request->company_id;
-    }
+        $data = $request->all();
+        if ( $ad = $request->file('ad')){
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        try {
+            $name = date('Y-m-d') . '-' . $ad->getClientOriginalName();
 
-            $companyAd = CompanyVideo::find($id);
-            return view('dashboard.companyVideo.show', compact('companyAd'));
-        } catch (\Exception $exception) {
-            return redirect()->back();
-        }
-    }
+            $path = 'uploades';
+            $fullPath = $path . '/' . $name;
+            $ad->move($path, $name);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        return view('dashboard.companyVideo.edit', compact('id'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-
-        try {
-            $companyAd = CompanyVideo::findOrFail($id);
-            // if the request from update path with the new path
-            if ($request->has('path')) {
-                if ($companyAd->path != '') {
-                    unlink($companyAd->path);
-                }
-                $companyAd->path = $request->get('path');
-                $companyAd->save();
-                return '1';
-            } // if the request from delete path with the empty 8path
-            else {
-                $companyAd->path = '';
-                $companyAd->save();
-                return '1';
-            }
-
-
-        } catch (\Exception $exception) {
-            return '2';
+            CompanyVideo::create([
+                'company_id'    => $data['company_id'],
+                'path'          => $fullPath
+            ]);
         }
 
-
+        return redirect()->back();
     }
 
     /**
@@ -150,36 +92,10 @@ class CompanyVideoController extends Controller
         $companyAd2['sEcho'] = 0;
         $companyAd2['sColumns'] = '';
 
-        $companyAd2['data'] = $companyAd->take($length)->skip($start)->get();
+        $companyAd2['data'] = $companyAd->take($length)->skip($start)->orderBy('created_at' , 'desc')->get();
         return $companyAd2;
     }
 
-
-    public function upload(Request $request)
-    {
-        if ($request->hasFile('company_ad')) {
-
-            $ad = $request->file('company_ad');
-            $name = date('Y-m-d') . '-' . $ad->getClientOriginalName();
-
-            $path = 'uploades';
-            $fullPath = $path . '/' . $name;
-            $ad->move($path, $name);
-
-            return $fullPath;
-        }
-    }
-
-    public function delete(Request $request)
-    {
-        if ($request->ajax()) {
-
-            unlink($request->path);
-            return "1";
-
-        }
-
-    }
 
     public function getAd(Request $request)
     {

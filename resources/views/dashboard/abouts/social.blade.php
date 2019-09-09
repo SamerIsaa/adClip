@@ -22,11 +22,24 @@
                     </div>
 
                     <!--begin::Form-->
-                    <form class="kt-form" action="{{ route('social.store') }}" method="post">
+                    <form class="kt-form" action="{{ route('social.store') }}" method="post" id="kt_form_1">
                         @csrf
+                        <div class="form-group form-group-last kt-hide">
+                            <div class="alert alert-danger" role="alert" id="kt_form_1_msg">
+                                <div class="alert-icon"><i class="flaticon-warning"></i></div>
+                                <div class="alert-text">
+                                    Oh snap! Change a few things up and try submitting again.
+                                </div>
+                                <div class="alert-close">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true"><i class="la la-close"></i></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                         <div class="kt-portlet__body ">
                             <input type="hidden" name="id" value="{{$social->id}}">
-{{--                             if any error happen from validation--}}
+                            {{--                             if any error happen from validation--}}
                             @if($errors->any())
                                 <div class="alert alert-danger fade show" role="alert">
                                     <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
@@ -40,9 +53,9 @@
                             @endif
 
 
-{{--                            // if the creation for the admin complete successfully--}}
+                            {{--                            // if the creation for the admin complete successfully--}}
                             @if(session('success'))
-                                <div class="alert alert-success fade show" role="alert" >
+                                <div class="alert alert-success fade show" role="alert">
                                     <div class="alert-icon"><i class="flaticon-warning"></i></div>
                                     <div class="alert-text">{{ session('success') }}</div>
                                     <div class="alert-close">
@@ -56,21 +69,25 @@
 
                             <div class="form-group">
                                 <label>رابط صفحة الفيسبوك</label>
-                                <input type="text" class="form-control form-control-lg text-left" aria-describedby="emailHelp"
+                                <input type="text" class="form-control form-control-lg text-left"
+                                       aria-describedby="emailHelp"
                                        placeholder="رابط صفحة الفيسبوك" name="facebook" value="{{ $social->facebook }}">
                             </div>
 
 
                             <div class="form-group">
                                 <label>رابط صفحة التويتر</label>
-                                <input type="text" class="form-control form-control-lg text-left" aria-describedby="emailHelp"
+                                <input type="text" class="form-control form-control-lg text-left"
+                                       aria-describedby="emailHelp"
                                        placeholder="رابط صفحة التويتر" name="twitter" value="{{ $social->twitter }}">
                             </div>
 
                             <div class="form-group">
                                 <label>رابط صفحة الإنستقرام</label>
-                                <input type="text" class="form-control form-control-lg text-left" aria-describedby="emailHelp"
-                                       placeholder="رابط صفحة الإنستقرام" name="instagram" value="{{ $social->instagram }}">
+                                <input type="text" class="form-control form-control-lg text-left"
+                                       aria-describedby="emailHelp"
+                                       placeholder="رابط صفحة الإنستقرام" name="instagram"
+                                       value="{{ $social->instagram }}">
                             </div>
 
                         </div>
@@ -92,4 +109,56 @@
     </div>
 
     <!-- end:: Content -->
+@endsection
+
+@section('js')
+
+    <script>
+
+
+        var KTFormControls = function () {
+            // Private functions
+
+            var demo1 = function () {
+                $("#kt_form_1").validate({
+                    // define validation rules
+                    rules: {
+                        facebook: {
+                            required: true,
+                        },
+                        twitter: {
+                            required: true
+                        },
+                        instagram: {
+                            required: true,
+                        }
+                    },
+
+                    //display error alert on form submit
+                    invalidHandler: function (event, validator) {
+                        var alert = $('#kt_form_1_msg');
+                        alert.removeClass('kt--hide').show();
+                        KTUtil.scrollTop();
+                    },
+
+                    submitHandler: function (form) {
+                        form[0].submit(); // submit the form
+                    }
+                });
+            }
+
+
+            return {
+                // public functions
+                init: function () {
+                    demo1();
+
+                }
+            };
+        }();
+
+        jQuery(document).ready(function () {
+            KTFormControls.init();
+        });
+    </script>
 @endsection

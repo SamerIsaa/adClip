@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Validation\Rules\In;
+use function Sodium\add;
 use Validator;
 use Yajra\DataTables\DataTables;
 
@@ -112,10 +113,11 @@ class AdminController extends Controller
 
         $validator = Validator::make($data, [
             'name' => 'required',
-            'password' => 'nullable|min:6',
+            'password' => 'nullable|confirmed|min:6',
         ], [
             'name.required'   => 'الأسم مطلوب',
             'password.min'   => 'كلمة المرور يجب ان تتكون من 6 حروف على الأقل',
+            'password.confirmed'   => 'كلمة المرور يجب ان تكون متطابقة',
 
         ]);
 
@@ -123,21 +125,26 @@ class AdminController extends Controller
             return redirect()->back()->withErrors($validator);
         }
 
-        try{
-            $admin = Admin::findOrFail($id);
-            $admin->name = $data['name'];
-            if (isset($data['password']))
-                $admin->password = Hash::make($data['password']);
+        $admin = Admin::orWhere('email' , $data['email'])->orWhere('user_name' , $data['user_name'])->get();
 
-            $admin->save();
+        // test if there is two admins foreach have user_name and email as we passed in the form
+        if ($admin->count() == 1){
+            if ($admin->first()->id = $id){
 
-            session()->flash('success' ,'لقد تم تحديث بيانات المدير بنجاح ');
-            return redirect()->back();
-        }catch (\Exception $e){
-            session()->flash('error' ,'لقد حدث خطأ ما');
+                $admin->first()->name = $data['name'];
+                if (isset($data['password']))
+                    $admin->first()->password = Hash::make($data['password']);
+
+                $admin->first()->save();
+
+                session()->flash('success' ,'لقد تم تحديث بيانات المدير بنجاح ');
+                return redirect()->back();
+
+            }
+        }else{
+            session()->flash('error' , 'اسم المستخدم او البريد الإلكتروني مسجلين لمستخدم اخر');
             return redirect()->back();
         }
-
     }
 
     public function destroy(Request $request)
@@ -151,6 +158,51 @@ class AdminController extends Controller
         }
 
 
+    }
+
+    public function showSettingPage()
+    {
+        return view('dashboard.admins.settings');
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $data = $request->all();
+
+        $validator = Validator::make($data, [
+            'name' => 'required',
+            'password' => 'nullable|confirmed|min:6',
+        ], [
+            'name.required'   => 'الأسم مطلوب',
+            'password.min'   => 'كلمة المرور يجب ان تتكون من 6 حروف على الأقل',
+            'password.confirmed'   => 'كلمة المرور يجب ان تكون متطابقة',
+
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+
+        $admin = Admin::orWhere('email' , $data['email'])->orWhere('user_name' , $data['user_name'])->get();
+
+        // test if there is two admins foreach have user_name and email as we passed in the form
+        if ($admin->count() == 1){
+            if ( $admin->first()->id = auth()->id() ){
+
+                $admin->first()->name = $data['name'];
+                if (isset($data['password']))
+                    $admin->first()->password = Hash::make($data['password']);
+
+                $admin->first()->save();
+
+                session()->flash('success' ,'لقد تم تحديث بيانات المدير بنجاح ');
+                return redirect()->back();
+
+            }
+        }else{
+            session()->flash('error' , 'اسم المستخدم او البريد الإلكتروني مسجلين لمستخدم اخر');
+            return redirect()->back();
+        }
     }
 
 }

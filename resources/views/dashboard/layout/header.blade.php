@@ -38,17 +38,17 @@
                 <!--begin: Navigation -->
                 <div class="kt-notification">
 
-{{--                    <a href="#" class="kt-notification__item">--}}
-{{--                        <div class="kt-notification__item-icon">--}}
-{{--                            <i class="flaticon2-gear kt-font-warning"></i>--}}
-{{--                        </div>--}}
-{{--                        <div class="kt-notification__item-details">--}}
-{{--                            <div class="kt-notification__item-title kt-font-bold">--}}
-{{--                                اعدادت الحساب--}}
-{{--                            </div>--}}
+                    <a href="{{ route('admin.showSettings') }}" class="kt-notification__item">
+                        <div class="kt-notification__item-icon">
+                            <i class="flaticon2-gear kt-font-warning"></i>
+                        </div>
+                        <div class="kt-notification__item-details">
+                            <div class="kt-notification__item-title kt-font-bold">
+                                اعدادت الحساب
+                            </div>
 
-{{--                        </div>--}}
-{{--                    </a>--}}
+                        </div>
+                    </a>
                     <div class="kt-notification__custom kt-space-between">
                         <a href="{{ route('admin.logout') }}" class="btn btn-label btn-label-brand btn-sm btn-bold">تسجيل خروج</a>
                     </div>

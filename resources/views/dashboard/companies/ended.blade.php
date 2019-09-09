@@ -90,6 +90,7 @@
                             data: 'logo',
                             title: "الشعار",
                             textAlign: 'center',
+                            orderable: false
                         },
                         {
                             data: 'name_ar',
@@ -104,6 +105,7 @@
                             data: 'Actions',
                             responsivePriority: -1,
                             textAlign: 'center',
+                            orderable: false
                         },
                     ],
                     columnDefs: [
@@ -122,7 +124,7 @@
                             <div class="dropdown-menu dropdown-menu-right">
                             	<input type="hidden" class="id_hidden" value="` + full.id + `">
                                 <a class="dropdown-item" href="admin/company/` + full.id + `/edit"><i class="la la-edit"></i> تعديل بيانات الشركة</a>
-                                <a class="dropdown-item delete"  href="javascript:;" ><i class="la la-leaf"></i> `+ y  +` </a>
+                                <a class="dropdown-item delete"  href="javascript:;" ><i class="la la-leaf"></i> ` + y + ` </a>
 
                             </div>
                         </span>`;
@@ -173,12 +175,9 @@
                 if (result.value) {
 
                     $.ajax({
-                        url: "{{route('company.deactivate')}}",
-                        method: "post",
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            "id": id_hidden
-                        },
+                        url: "{{url('company') }}/" + id_hidden + "/deactivate",
+                        method: "get",
+
                         success: function (e) {
                             if (e == 1) {
                                 swal.fire(
